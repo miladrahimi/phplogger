@@ -5,7 +5,7 @@
 Storage Interface (2015/5/12)
 ------------------------------------------------------------
 Storage interface is the standard interface for the classes
-which provide storage (a place to store) for PHPLogger class.
+which provide storage (a place to store) for Logger class.
 ------------------------------------------------------------
 http://neatplex.com/project/phplogger/1.0/about/storage
 ------------------------------------------------------------
@@ -13,7 +13,7 @@ http://neatplex.com/project/phplogger/1.0/about/storage
 
 /**
  * Interface Storage
- * @package Neatplex\PHP\PHPLogger
+ * @package Neatplex\Logger
  */
 interface Storage {
 
