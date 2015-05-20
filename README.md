@@ -21,7 +21,7 @@ $dir = new Neatplex\PHPLogger\Directory("./logs/");
 ```
 Then you can use PHPLogger with the directory storage which is defined above:
 ```
-$logger = new Neatplex\PHPLogger\PHPLogger($dir);
+$logger = new Neatplex\PHPLogger\Logger($dir);
 ```
 Of course you can inject $dir with `setStorage()` method.
 Now you may store your first log:
