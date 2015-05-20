@@ -33,7 +33,8 @@ Alert is not only supported log level, so you may see all supported log level ou
 # Installation
 
 ## Using Composer
-It's strongly prefered to install package using [composer](https://getcomposer.org)!
+It's strongly prefered to install package using [composer](https://getcomposer.org)! 
+If you are not familiar with it, you may read this blog post about [How to use composer in PHP projects](http://miladrahimi.com/blog/2015/04/12/how-to-use-composer-in-php-projects).
 Add this package to your `composer.json`:  
 ```
 "require": {
