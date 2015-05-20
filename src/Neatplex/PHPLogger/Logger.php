@@ -6,7 +6,7 @@ Logger Class (2015/5/12)
 ------------------------------------------------------------
 Logger class is implementation of PSR-3 abstract logger.
 ------------------------------------------------------------
-http://neatplex.com/project/phplogger/1.0/about/phplogger
+http://neatplex.com/project/phplogger/1.0/about/logger
 ------------------------------------------------------------
 */
 
@@ -48,13 +48,13 @@ class Logger extends AbstractLogger
     public function log($level, $message, array $context = array())
     {
         if (empty($level))
-            throw new InvalidArgumentException("Neatplex Logger, Error 1011: Invalid log level.");
+            throw new InvalidArgumentException("Neatplex PHPLogger, Error 1011: Invalid log level.");
         if (!is_string($message) && (!is_object($message) || !method_exists($message, "__toString")))
-            throw new InvalidArgumentException("Neatplex Logger, Error 1012: Non-string log message");
+            throw new InvalidArgumentException("Neatplex PHPLogger, Error 1012: Non-string log message");
         if (!is_array($context))
-            throw new InvalidArgumentException("Neatplex Logger, Error 1013: Non-array log context");
+            throw new InvalidArgumentException("Neatplex PHPLogger, Error 1013: Non-array log context");
         if (!($this->storage instanceof Directory))
-            throw new InvalidArgumentException("Neatplex Logger, Error 1014: Undefined or Invalid Storage");
+            throw new InvalidArgumentException("Neatplex PHPLogger, Error 1014: Undefined or Invalid Storage");
         $this->storage->store($level, $message, $context);
     }
 
