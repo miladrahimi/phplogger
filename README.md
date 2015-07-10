@@ -1,58 +1,97 @@
 # PHPLogger
 Free PHP logger for neat and powerful projects!
 
-# Intro
-PHPLogger is a easy-to-use and standard logger which you should use in your PHP projects. 
-Loggers make debugging dramatically simpler and 
-for large-scale projects it is a requirement, not a arbitrary option! 
-PHPLogger currently support only directory and filesystem storage but it is supposed to store logs 
-into different kinds of storage like database and email ASAP.
 
-# PSR-3 Standards
-This package is bulit based on [PSR-3](http://www.php-fig.org/psr/psr-3) standards 
-and implements its abstract classes so you need to install it too.
+## Documentation
+PHP Logger is package for PHP developers to log.
+It implemented based on [PSR-3](http://www.php-fig.org/psr/psr-3) Standard.
 
-# Overview
-PHPLogger has potential to store logs into different kinds of storage 
-but for now you only can use directoy (filesystem) to store them. 
+### Installation
+#### Using Composer
+It's strongly recommended to use [Composer](http://getcomposer.org).
+If you are not familiar with Composer, The article
+[How to use composer in php projects](http://miladrahimi.com/blog/2015/04/12/how-to-use-composer-in-php-projects)
+can be useful.
+After installing Composer, go to your project directory and run following command there:
+```
+php composer.phar require miladrahimi/phplogger
+```
+Windows:
+```
+composer require miladrahimi/phplogger
+```
+Or if you have `composer.json` file already in your application,
+you may add this package to your application requirements
+and update your dependencies:
+```
+"require": {
+    "miladrahimi/phplogger": "dev-master"
+}
+```
+```
+php composer.phar update
+```
+Windows:
+```
+composer update
+```
+#### Manually
+You can use your own autoloader as long as it follows [PSR-0](http://www.php-fig.org/psr/psr-0) or
+[PSR-4](http://www.php-fig.org/psr/psr-4) standards.
+In this case you can put `src` directory content in your vendor directory.
+
+### Getting Started
+PHPLogger has potential to store logs into different kinds of storage,
+but for now you can only use directory (filesystem) to store them. 
 Following codes demonstrate how to define directory storage: 
 ```
-$dir = new MiladRahimi\PHPLogger\Directory("./logs/");
+use MiladRahimi\PHPLogger\Directory;
+$dir = new Directory("./logs/");
 ```
 Then you can use PHPLogger with the directory storage which is defined above:
 ```
-$logger = new MiladRahimi\PHPLogger\Logger($dir);
+use MiladRahimi\PHPLogger\Logger;
+$logger = new Logger();
+$logger->addStorage($dir);
 ```
-Of course you can inject $dir with `setStorage()` method.
 Now you may store your first log:
 ```
 $logger->alert("This is an alert!");
 ```
-Alert is not only supported log level, so you may see all supported log level out there in [PSR-3](http://www.php-fig.org/psr/psr-3) page.
+Alert is not only supported log level,
+so you may see all supported log level out there in [PSR-3](http://www.php-fig.org/psr/psr-3) page.
 
-# Installation
+### Log method
+The broader method is `Logger::log()` method which gets log level as its first parameter.
+Following example show how to use this method:
+```
+use MiladRahimi\PHPLogger\Logger;
+use MiladRahimi\PHPLogger\Directory;
 
-## Using Composer
-It's strongly prefered to install package using [composer](https://getcomposer.org)! 
-If you are not familiar with it, you may read this blog post about [How to use composer in PHP projects](http://miladrahimi.com/blog/2015/04/12/how-to-use-composer-in-php-projects).
-Add this package to your `composer.json`:  
-```
-"require": {
-	"miladrahimi/phplogger": "dev-master"
-}
-```
-or if you prefer command line, change directory to project root and:
-```
-php composer.phar require "miladrahimi/phplogger":"dev-master"
-```
-## Manual Installation
-Get a copy of the package source code and [PSR-3 Log](https://github.com/php-fig/log) package, 
-then copy them into your projects. 
-Caution your autoloader has to support [PSR-4 Log](http://www.php-fig.org/psr/psr-4) standard 
-to autoload this two package appropriately.
+$directory = new Directory(__DIR__);
 
-# Documentation
-You may see official documentation in http://miladrahimi.com/project/phplogger
+$logger = new Logger();
+$logger->addStorage($directory);
+$logger->log("alert", "This is an alert message!");
+```
+To follow standards you may use `LogLevel` constants which are provided by PSR-3 standard.
+```
+use MiladRahimi\PHPLogger\Logger;
+use MiladRahimi\PHPLogger\Directory;
+use Psr\Log\LogLevel;
 
-# License
-PHPLogger is created by [MiladRahimi](http://miladrahimi.com) and released under the [MIT License](http://opensource.org/licenses/mit-license.php).
+$directory = new Directory(__DIR__);
+
+$logger = new Logger();
+$logger->addStorage($directory);
+$logger->log(LogLevel::ALERT, "This is an error message!");
+```
+
+## Contributors
+*	[Milad Rahimi](http://miladrahimi.com)
+
+## Homepage
+*   [PHPLogger](http://miladrahimi.github.io/phplogger)
+
+## License
+PHPRouter is released under the [MIT License](http://opensource.org/licenses/mit-license.php).

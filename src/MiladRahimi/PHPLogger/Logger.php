@@ -1,42 +1,26 @@
 <?php namespace MiladRahimi\PHPLogger;
 
-/*
-------------------------------------------------------------
-Logger Class (2015/5/12)
-------------------------------------------------------------
-Logger class is implementation of PSR-3 abstract logger.
-------------------------------------------------------------
-http://neatplex.com/project/phplogger/1.0/about/logger
-------------------------------------------------------------
-*/
-
 use Psr\Log\AbstractLogger;
-use Psr\Log\InvalidArgumentException;
+use Psr\Log\LogLevel;
 
 /**
  * Class Logger
  *
- * @package MiladRahimi\Logger
+ * Logger class is the main package class.
+ * This class forms the log contents then store them via added storage classes.
+ *
+ * @package MiladRahimi\PHPLogger
+ *
+ * @author Milad Rahimi <info@miladrahimi.com>
  */
 class Logger extends AbstractLogger
 {
     /**
      * Storage Object to store logs in its provided space
      *
-     * @var Directory
+     * @var array
      */
-    protected $storage;
-
-    /**
-     * Constructor
-     *
-     * @param Storage $stock
-     */
-    public function __construct(Storage $stock = null)
-    {
-        if ($stock != null)
-            $this->setStorage($stock);
-    }
+    protected $storage = array();
 
     /**
      * @param mixed $level
@@ -47,30 +31,24 @@ class Logger extends AbstractLogger
      */
     public function log($level, $message, array $context = array())
     {
-        if (empty($level))
-            throw new InvalidArgumentException("MiladRahimi PHPLogger, Error 1011: Invalid log level.");
-        if (!is_string($message) && (!is_object($message) || !method_exists($message, "__toString")))
-            throw new InvalidArgumentException("MiladRahimi PHPLogger, Error 1012: Non-string log message");
-        if (!is_array($context))
-            throw new InvalidArgumentException("MiladRahimi PHPLogger, Error 1013: Non-array log context");
-        if (!($this->storage instanceof Directory))
-            throw new InvalidArgumentException("MiladRahimi PHPLogger, Error 1014: Undefined or Invalid Storage");
-        $this->storage->store($level, $message, $context);
+        if (!isset($level) || !is_scalar($level))
+            throw new InvalidArgumentException("Invalid level");
+        if (!isset($message) || !is_scalar($message) || (is_object($message) && !method_exists($message, "__toString")))
+            throw new InvalidArgumentException("Non-string message");
+        if (!is_array($context) && !is_object($context))
+            throw new InvalidArgumentException("Non-array context");
+        if (empty($this->storage))
+            throw new InvalidArgumentException("No storage to store");
+        /** @var Storage $storage */
+        foreach ($this->storage as $storage) {
+            $storage->store($level, $message, $context);
+        }
     }
 
-    /**
-     * @return Storage
-     */
-    public function getStorage()
+    public function addStorage(Storage $storage)
     {
-        return $this->storage;
-    }
-
-    /**
-     * @param Storage $storage
-     */
-    public function setStorage($storage)
-    {
-        $this->storage = $storage;
+        if (!$storage instanceof Storage)
+            throw new InvalidArgumentException("Invalid storage object");
+        array_push($this->storage, $storage);
     }
 }
