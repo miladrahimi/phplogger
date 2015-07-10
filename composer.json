@@ -1,8 +1,8 @@
 {
-    "name": "neatplex/phplogger",
+    "name": "miladrahimi/phplogger",
     "description": "Free PHP logger for neat and powerful projects!",
     "keywords": ["Logger", "PSR-3", "PHP", "Free", "Library", "Neat", "Powerful"],
-    "homepage": "http://neatplex.com/project/phplogger",
+    "homepage": "http://miladrahimi.github.io/phplogger",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -14,14 +14,14 @@
         }
     ],
 	"support": {
-        "email": "info@neatplex.com",
-        "source": "https://github.com/neatplex/phplogger/issues"
+        "email": "info@miladrahimi.com",
+        "source": "https://github.com/miladrahimi/phplogger/issues"
     },
     "require": {
         "php": ">=5.3.0",
         "psr/log": "1.0.*@dev"
     },
     "autoload": {
-        "psr-4": {"Neatplex\\": "src/Neatplex/"}
+        "psr-4": {"MiladRahimi\\": "src/MiladRahimi/"}
     }
 }

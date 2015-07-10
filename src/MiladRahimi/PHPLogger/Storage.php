@@ -1,4 +1,4 @@
-<?php namespace Neatplex\PHPLogger;
+<?php namespace MiladRahimi\PHPLogger;
 
 /*
 ------------------------------------------------------------
@@ -13,7 +13,7 @@ http://neatplex.com/project/phplogger/1.0/about/storage
 
 /**
  * Interface Storage
- * @package Neatplex\Logger
+ * @package MiladRahimi\Logger
  */
 interface Storage {
 
