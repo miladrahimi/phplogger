@@ -43,7 +43,7 @@ class Directory implements Storage
      */
     public function __construct($path = null)
     {
-        if ($path != null)
+        if (null !== $path)
             $this->setPath($path);
     }
 

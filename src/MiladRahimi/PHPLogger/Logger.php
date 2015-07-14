@@ -1,6 +1,7 @@
 <?php namespace MiladRahimi\PHPLogger;
 
 use Psr\Log\AbstractLogger;
+use Psr\Log\InvalidArgumentException;
 use Psr\Log\LogLevel;
 
 /**
@@ -28,6 +29,8 @@ class Logger extends AbstractLogger
      * @param array $context
      *
      * @return null|void
+     *
+     * @throws InvalidArgumentException
      */
     public function log($level, $message, array $context = array())
     {
@@ -45,6 +48,13 @@ class Logger extends AbstractLogger
         }
     }
 
+    /**
+     * Add a new storage
+     *
+     * @param Storage $storage
+     *
+     * @throws InvalidArgumentException
+     */
     public function addStorage(Storage $storage)
     {
         if (!$storage instanceof Storage)
