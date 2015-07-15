@@ -1,7 +1,6 @@
 <?php namespace MiladRahimi\PHPLogger;
 
 use Psr\Log\AbstractLogger;
-use Psr\Log\InvalidArgumentException;
 use Psr\Log\LogLevel;
 
 /**
@@ -25,43 +24,63 @@ class Logger extends AbstractLogger
 
     /**
      * Log Levels
+     *
      * @var array
      */
     private $logLevels = array(
         LogLevel::EMERGENCY => 0,
-        LogLevel::ALERT     => 1,
-        LogLevel::CRITICAL  => 2,
-        LogLevel::ERROR     => 3,
-        LogLevel::WARNING   => 4,
-        LogLevel::NOTICE    => 5,
-        LogLevel::INFO      => 6,
-        LogLevel::DEBUG     => 7
+        LogLevel::ALERT => 1,
+        LogLevel::CRITICAL => 2,
+        LogLevel::ERROR => 3,
+        LogLevel::WARNING => 4,
+        LogLevel::NOTICE => 5,
+        LogLevel::INFO => 6,
+        LogLevel::DEBUG => 7
     );
 
     /**
+     * Constructor
+     *
+     * @param Storage|null $storage
+     */
+    public function __construct(Storage $storage = null)
+    {
+        if ($storage !== null)
+            $this->addStorage($storage);
+    }
+
+    /**
+     * Log!
+     *
      * @param mixed $level
      * @param string $message
      * @param array $context
      *
+     * @return null|void
      * @throws InvalidArgumentException
      */
     public function log($level, $message, array $context = array())
     {
         $this->validate($level, $message, $context);
-
+        $message = "MESSAGE:\r\n" . (empty($message) ? "[ NOT SET ]" : trim($message)) . "\r\n";
+        $message .= "CONTEXT:\r\n" . (empty($context) ? "[ NOT SET ]" : print_r($context, true)) . "\r\n";
+        $message .= "### Logged by PHPLogger @ " . date("Y/m/d H:i") . "\r\n\r\n";
+        /** @var Storage $storage */
         foreach ($this->storage as $storage) {
             $storage->store($level, $message, $context);
         }
     }
 
     /**
-     * @param $log
-     * @param $message
+     * Validate given data to log
      *
-     * @throws InvalidArgumentException
+     * @param $level
+     * @param $message
+     * @param array $context
      */
-    private function validate($level, $message, array $context = array()) {
-        if(!array_key_exists($level, $this->logLevels))
+    private function validate($level, $message, array $context = array())
+    {
+        if (!array_key_exists($level, $this->logLevels))
             throw new InvalidArgumentException("Invalid level");
         if (!isset($message) || !is_scalar($message) || (is_object($message) && !method_exists($message, "__toString")))
             throw new InvalidArgumentException("Non-string message");

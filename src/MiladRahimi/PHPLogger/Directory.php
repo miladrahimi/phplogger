@@ -1,21 +1,10 @@
 <?php namespace MiladRahimi\PHPLogger;
 
-/*
-------------------------------------------------------------
-Directory Class (2015/5/12)
-------------------------------------------------------------
-Directory class holds information of directory and files which
-going to keep the content of logs.
-It implements Storage interface.
-------------------------------------------------------------
-http://neatplex.com/project/phplogger/1.0/about/directory
-------------------------------------------------------------
-*/
-
-use Psr\Log\InvalidArgumentException;
-
 /**
  * Class Directory
+ *
+ * This class implements Storage interface to be used in Logger class.
+ * Directory is a storage which stores logs into a directory.
  *
  * @package MiladRahimi\Logger
  */
@@ -30,7 +19,8 @@ class Directory implements Storage
     private $path;
 
     /**
-     * Storage Path to store logs
+     * Log file extensions which will be created
+     * e.g. "log" or "txt"
      *
      * @var string
      */
@@ -60,23 +50,20 @@ class Directory implements Storage
     {
         $path = realpath($this->path);
         if (!is_dir($path) || !is_writable($path))
-            throw new InvalidArgumentException("MiladRahimi PHPLogger, Error 1015: Non-writable log directory.");
-        if (!preg_match("/^[A-Za-z0-9\.\_\-]+$/", $level))
-            throw new InvalidArgumentException("MiladRahimi PHPLogger, Error 1016: Bad name for log level.");
-        $message = "MESSAGE:\r\n" . (empty($message) ? "[ NOT SET ]" : trim($message)) . " \r\n";
-        $message .= "CONTEXT:\r\n" . (empty($context) ? "[ NOT SET ]" : print_r($context, true)) . " \r\n";
-        $message .= "### Logged by MiladRahimi Logger @ " . date("Y/m/d H:i") . " \r\n\r\n";
+            throw new PHPLoggerException("Non-writable log directory path");
+        if (!isset($level) || !preg_match("/^[A-Za-z0-9\.\_\-]+$/", $level))
+            throw new InvalidArgumentException("Bad name for log level");
         $fn = $path . DIRECTORY_SEPARATOR . $level . '.' . (empty($this->extension) ? 'log' : $this->extension);
         $fp = fopen($fn, "a+");
         if (!is_resource($fp))
-            throw new \Exception("MiladRahimi PHPLogger, Error 1017: Cannot create the log file.");
+            throw new PHPLoggerException("Cannot create the log file");
         fclose($fp);
         $fc = file_get_contents($fn);
         if ($fc === false)
             $fc = "";
         $r = file_put_contents($fn, $message . $fc);
         if ($r === false)
-            throw new \Exception("MiladRahimi PHPLogger, Error 1018: Non-writable log file.");
+            throw new PHPLoggerException("Non-writable log file");
     }
 
     /**
@@ -92,7 +79,9 @@ class Directory implements Storage
      */
     public function setPath($path)
     {
-        $this->path = empty($path) ? null : trim($path);
+        if (!isset($path) || !is_scalar($path))
+            throw new InvalidArgumentException("Non-string directory path");
+        $this->path = trim((string)$path);
     }
 
     /**
@@ -108,7 +97,9 @@ class Directory implements Storage
      */
     public function setExtension($extension)
     {
-        $this->extension = empty($extension) ? null : trim($extension);
+        if (!isset($extension) || !is_scalar($extension))
+            throw new InvalidArgumentException("Non-string directory path");
+        $this->extension = trim((string)$extension);
     }
 
 }
