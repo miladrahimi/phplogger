@@ -24,17 +24,44 @@ class Logger extends AbstractLogger
     protected $storage = array();
 
     /**
+     * Log Levels
+     * @var array
+     */
+    private $logLevels = array(
+        LogLevel::EMERGENCY => 0,
+        LogLevel::ALERT     => 1,
+        LogLevel::CRITICAL  => 2,
+        LogLevel::ERROR     => 3,
+        LogLevel::WARNING   => 4,
+        LogLevel::NOTICE    => 5,
+        LogLevel::INFO      => 6,
+        LogLevel::DEBUG     => 7
+    );
+
+    /**
      * @param mixed $level
      * @param string $message
      * @param array $context
-     *
-     * @return null|void
      *
      * @throws InvalidArgumentException
      */
     public function log($level, $message, array $context = array())
     {
-        if (!isset($level) || !is_scalar($level))
+        $this->validate($level, $message, $context);
+
+        foreach ($this->storage as $storage) {
+            $storage->store($level, $message, $context);
+        }
+    }
+
+    /**
+     * @param $log
+     * @param $message
+     *
+     * @throws InvalidArgumentException
+     */
+    private function validate($level, $message, array $context = array()) {
+        if(!array_key_exists($level, $this->logLevels))
             throw new InvalidArgumentException("Invalid level");
         if (!isset($message) || !is_scalar($message) || (is_object($message) && !method_exists($message, "__toString")))
             throw new InvalidArgumentException("Non-string message");
@@ -42,10 +69,6 @@ class Logger extends AbstractLogger
             throw new InvalidArgumentException("Non-array context");
         if (empty($this->storage))
             throw new InvalidArgumentException("No storage to store");
-        /** @var Storage $storage */
-        foreach ($this->storage as $storage) {
-            $storage->store($level, $message, $context);
-        }
     }
 
     /**
@@ -57,8 +80,6 @@ class Logger extends AbstractLogger
      */
     public function addStorage(Storage $storage)
     {
-        if (!$storage instanceof Storage)
-            throw new InvalidArgumentException("Invalid storage object");
         array_push($this->storage, $storage);
     }
 }
