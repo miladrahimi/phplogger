@@ -2,12 +2,12 @@
 
 /**
  * Interface Storage
- * All logger storage like Directory and Database must implements this interface.
  *
  * @package MiladRahimi\Logger
  * @author Milad Rahimi <info@miladrahimi.com>
  */
-interface Storage {
+interface Storage
+{
 
     /**
      * Store the log into the appropriate storage

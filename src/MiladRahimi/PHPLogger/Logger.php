@@ -5,8 +5,7 @@ use Psr\Log\LogLevel;
 
 /**
  * Class Logger
- * Logger class is the main package class.
- * This class forms the log contents then store them via added storage classes.
+ * Logger class forms the log contents then store them via added storage classes.
  *
  * @package MiladRahimi\PHPLogger
  * @author Milad Rahimi <info@miladrahimi.com>
@@ -50,18 +49,18 @@ class Logger extends AbstractLogger
     /**
      * Log!
      *
-     * @param mixed $level
-     * @param string $message
-     * @param array $context
+     * @param string $level : Log level
+     * @param string $message : Log message
+     * @param array $context : Log context (extra information)
      * @return null|void
      * @throws InvalidArgumentException
      */
     public function log($level, $message, array $context = array())
     {
         if (!isset($level) || !array_key_exists($level, $this->logLevels))
-            throw new InvalidArgumentException("Invalid log level");
+            throw new InvalidArgumentException("Level is not valid");
         if (!isset($message) || !is_scalar($message) || (is_object($message) && !method_exists($message, "__toString")))
-            throw new InvalidArgumentException("Non-string log message");
+            throw new InvalidArgumentException("Message must be a string value");
         if (empty($this->storage))
             throw new InvalidArgumentException("No storage to store");
         $content = "MESSAGE:\r\n" . (empty($message) ? "[EMPTY]" : trim($message)) . "\r\n";
@@ -76,7 +75,7 @@ class Logger extends AbstractLogger
     /**
      * Add a new storage
      *
-     * @param Storage $storage
+     * @param Storage $storage : Storage object
      * @throws InvalidArgumentException
      */
     public function addStorage(Storage $storage)

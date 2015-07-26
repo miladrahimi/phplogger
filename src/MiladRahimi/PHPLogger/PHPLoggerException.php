@@ -7,6 +7,7 @@
  * @package MiladRahimi\PHPLogger
  * @author Milad Rahimi <info@miladrahimi.com>
  */
-class PHPLoggerException extends \Exception {
+class PHPLoggerException extends \Exception
+{
     // Not implemented yet!
 }
