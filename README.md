@@ -24,7 +24,7 @@ and update your dependencies:
 
 ```
 "require": {
-    "miladrahimi/phplogger": "~1.3"
+    "miladrahimi/phplogger": "~1.4"
 }
 ```
 

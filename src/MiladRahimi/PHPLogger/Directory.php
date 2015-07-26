@@ -2,11 +2,11 @@
 
 /**
  * Class Directory
- *
  * This class implements Storage interface to be used in Logger class.
  * Directory is a storage which stores logs into a directory.
  *
  * @package MiladRahimi\Logger
+ * @author Milad Rahimi <info@miladrahimi.com>
  */
 class Directory implements Storage
 {
@@ -40,20 +40,19 @@ class Directory implements Storage
     /**
      * Store logged message into a file
      *
-     * @param string $level
-     * @param string|\Exception $message
-     * @param array $context
-     *
-     * @throws \Exception
+     * @param string $name
+     * @param string $content
+     * @return bool
+     * @throws PHPLoggerException
      */
-    public function store($level, $message, $context)
+    public function store($name, $content)
     {
         $path = realpath($this->path);
         if (!is_dir($path) || !is_writable($path))
             throw new PHPLoggerException("Non-writable log directory path");
-        if (!isset($level) || !preg_match("/^[A-Za-z0-9\.\_\-]+$/", $level))
-            throw new InvalidArgumentException("Bad name for log level");
-        $fn = $path . DIRECTORY_SEPARATOR . $level . '.' . (empty($this->extension) ? 'log' : $this->extension);
+        if (!isset($name) || !preg_match("/^[A-Za-z0-9\.\_\-]+$/", $name))
+            throw new InvalidArgumentException("Bad log name");
+        $fn = $path . DIRECTORY_SEPARATOR . $name . '.' . (empty($this->extension) ? 'log' : $this->extension);
         $fp = fopen($fn, "a+");
         if (!is_resource($fp))
             throw new PHPLoggerException("Cannot create the log file");
@@ -61,7 +60,7 @@ class Directory implements Storage
         $fc = file_get_contents($fn);
         if ($fc === false)
             $fc = "";
-        $r = file_put_contents($fn, $message . $fc);
+        $r = file_put_contents($fn, $content . $fc);
         if ($r === false)
             throw new PHPLoggerException("Non-writable log file");
     }
@@ -98,7 +97,9 @@ class Directory implements Storage
     public function setExtension($extension)
     {
         if (!isset($extension) || !is_scalar($extension))
-            throw new InvalidArgumentException("Non-string directory path");
+            throw new InvalidArgumentException("Non-string extension");
+        if(strlen($extension) < 1 || strlen($extension) > 9)
+            throw new InvalidArgumentException("Extension length must be between 1 and 9 char");
         $this->extension = trim((string)$extension);
     }
 
