@@ -14,7 +14,7 @@ article if you are not familiar with [Composer](http://getcomposer.org).
 Run following command in your project root directory:
 
 ```
-composer require miladrahimi/phptemplate
+composer require miladrahimi/phplogger
 ```
 
 ### Manually
