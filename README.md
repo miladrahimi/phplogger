@@ -1,5 +1,5 @@
 # PHPLogger
-Free PHP logger for neat and powerful projects!
+A simple logger for php projects
 
 ## Overview
 PHP Logger is a simple package for PHP developers to log.
